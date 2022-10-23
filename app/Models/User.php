@@ -10,10 +10,14 @@ use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class User extends Authenticatable implements HasMedia
 {
     use HasApiTokens, HasFactory, Notifiable, Billable, InteractsWithMedia;
+    use HasRolesAndAbilities;
+    use sluggable;
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +29,15 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'handle' => [
+                'source' => ['title'],
+            ],
+        ];
+    }
 
     /**
      * The attributes that should be hidden for serialization.
